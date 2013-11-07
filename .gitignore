@@ -229,6 +229,7 @@ silk/float/x64
 src/Debug
 src/Release
 src/x64
+test-driver
 
 #Ensure files required by SMC msvc builds are included
 !SMC/*.h
