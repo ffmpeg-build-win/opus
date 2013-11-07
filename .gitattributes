@@ -2,3 +2,11 @@
 .gitattributes		export-ignore
 
 update_version		export-ignore
+
+###############################################################################
+# Set default behavior to automatically normalize line endings.
+###############################################################################
+#* text=auto
+*.sln       text=auto
+*.vcxproj   text=auto
+*.vcproj    text=auto
