@@ -178,10 +178,18 @@
     <PostBuildEvent>
       <Command>mkdir $(OutputPath)\include
 mkdir $(OutputPath)\include\opus
-copy ..\include\*.h $(OutputPath)\include\opus
+copy ..\include\opus.h $(OutputPath)\include\opus
+copy ..\include\opus_defines.h $(OutputPath)\include\opus
+copy ..\include\opus_multistream.h $(OutputPath)\include\opus
+copy ..\include\opus_types.h $(OutputPath)\include\opus
 mkdir $(OutputPath)\licenses
 copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -206,10 +214,18 @@ copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     <PostBuildEvent>
       <Command>mkdir $(OutputPath)\include
 mkdir $(OutputPath)\include\opus
-copy ..\include\*.h $(OutputPath)\include\opus
+copy ..\include\opus.h $(OutputPath)\include\opus
+copy ..\include\opus_defines.h $(OutputPath)\include\opus
+copy ..\include\opus_multistream.h $(OutputPath)\include\opus
+copy ..\include\opus_types.h $(OutputPath)\include\opus
 mkdir $(OutputPath)\licenses
 copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
     <ClCompile>
@@ -234,10 +250,18 @@ copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     <PostBuildEvent>
       <Command>mkdir $(OutputPath)\include
 mkdir $(OutputPath)\include\opus
-copy ..\include\*.h $(OutputPath)\include\opus
+copy ..\include\opus.h $(OutputPath)\include\opus
+copy ..\include\opus_defines.h $(OutputPath)\include\opus
+copy ..\include\opus_multistream.h $(OutputPath)\include\opus
+copy ..\include\opus_types.h $(OutputPath)\include\opus
 mkdir $(OutputPath)\licenses
 copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">
     <ClCompile>
@@ -262,10 +286,18 @@ copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     <PostBuildEvent>
       <Command>mkdir $(OutputPath)\include
 mkdir $(OutputPath)\include\opus
-copy ..\include\*.h $(OutputPath)\include\opus
+copy ..\include\opus.h $(OutputPath)\include\opus
+copy ..\include\opus_defines.h $(OutputPath)\include\opus
+copy ..\include\opus_multistream.h $(OutputPath)\include\opus
+copy ..\include\opus_types.h $(OutputPath)\include\opus
 mkdir $(OutputPath)\licenses
 copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -302,10 +334,18 @@ copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     <PostBuildEvent>
       <Command>mkdir $(OutputPath)\include
 mkdir $(OutputPath)\include\opus
-copy ..\include\*.h $(OutputPath)\include\opus
+copy ..\include\opus.h $(OutputPath)\include\opus
+copy ..\include\opus_defines.h $(OutputPath)\include\opus
+copy ..\include\opus_multistream.h $(OutputPath)\include\opus
+copy ..\include\opus_types.h $(OutputPath)\include\opus
 mkdir $(OutputPath)\licenses
 copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -342,10 +382,18 @@ copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     <PostBuildEvent>
       <Command>mkdir $(OutputPath)\include
 mkdir $(OutputPath)\include\opus
-copy ..\include\*.h $(OutputPath)\include\opus
+copy ..\include\opus.h $(OutputPath)\include\opus
+copy ..\include\opus_defines.h $(OutputPath)\include\opus
+copy ..\include\opus_multistream.h $(OutputPath)\include\opus
+copy ..\include\opus_types.h $(OutputPath)\include\opus
 mkdir $(OutputPath)\licenses
 copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
     <ClCompile>
@@ -382,10 +430,18 @@ copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     <PostBuildEvent>
       <Command>mkdir $(OutputPath)\include
 mkdir $(OutputPath)\include\opus
-copy ..\include\*.h $(OutputPath)\include\opus
+copy ..\include\opus.h $(OutputPath)\include\opus
+copy ..\include\opus_defines.h $(OutputPath)\include\opus
+copy ..\include\opus_multistream.h $(OutputPath)\include\opus
+copy ..\include\opus_types.h $(OutputPath)\include\opus
 mkdir $(OutputPath)\licenses
 copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">
     <ClCompile>
@@ -422,10 +478,18 @@ copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     <PostBuildEvent>
       <Command>mkdir $(OutputPath)\include
 mkdir $(OutputPath)\include\opus
-copy ..\include\*.h $(OutputPath)\include\opus
+copy ..\include\opus.h $(OutputPath)\include\opus
+copy ..\include\opus_defines.h $(OutputPath)\include\opus
+copy ..\include\opus_multistream.h $(OutputPath)\include\opus
+copy ..\include\opus_types.h $(OutputPath)\include\opus
 mkdir $(OutputPath)\licenses
 copy ..\COPYING $(OutputPath)\licenses\opus.txt</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\celt\bands.c" />
