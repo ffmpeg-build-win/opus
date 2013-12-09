@@ -80,6 +80,8 @@ src/Release
 src/x64
 test-driver
 
+armopts.s
+
 #Ensure files required by SMC msvc builds are included
 !SMC/*.h
 
