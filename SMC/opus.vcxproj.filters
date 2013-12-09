@@ -417,6 +417,30 @@
     <ClCompile Include="..\silk\float\encode_frame_FLP.c">
       <Filter>Source Files\silk\silk_float</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\mlp_data.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opus_compare.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opus_multistream_decoder.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\opus_multistream_encoder.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mlp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\celt\celt_decoder.c">
+      <Filter>Source Files\celt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\celt\celt_encoder.c">
+      <Filter>Source Files\celt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\analysis.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\celt\fixed_debug.h">

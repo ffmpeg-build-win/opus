@@ -486,6 +486,8 @@ del ..\config.h
   <ItemGroup>
     <ClCompile Include="..\celt\bands.c" />
     <ClCompile Include="..\celt\celt.c" />
+    <ClCompile Include="..\celt\celt_decoder.c" />
+    <ClCompile Include="..\celt\celt_encoder.c" />
     <ClCompile Include="..\celt\celt_lpc.c" />
     <ClCompile Include="..\celt\cwrs.c" />
     <ClCompile Include="..\celt\entcode.c" />
@@ -607,10 +609,16 @@ del ..\config.h
     <ClCompile Include="..\silk\table_LSF_cos.c" />
     <ClCompile Include="..\silk\VAD.c" />
     <ClCompile Include="..\silk\VQ_WMat_EC.c" />
+    <ClCompile Include="..\src\analysis.c" />
+    <ClCompile Include="..\src\mlp.c" />
+    <ClCompile Include="..\src\mlp_data.c" />
     <ClCompile Include="..\src\opus.c" />
+    <ClCompile Include="..\src\opus_compare.c" />
     <ClCompile Include="..\src\opus_decoder.c" />
     <ClCompile Include="..\src\opus_encoder.c" />
     <ClCompile Include="..\src\opus_multistream.c" />
+    <ClCompile Include="..\src\opus_multistream_decoder.c" />
+    <ClCompile Include="..\src\opus_multistream_encoder.c" />
     <ClCompile Include="..\src\repacketizer.c" />
   </ItemGroup>
   <ItemGroup>
