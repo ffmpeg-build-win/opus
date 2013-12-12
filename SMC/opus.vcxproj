@@ -184,6 +184,11 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist $(OutDir)\include\opus (
+rd /s /q $(OutDir)\include\opus
+cd ../
+cd $(ProjectDir)
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -220,6 +225,11 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist $(OutDir)\include\opus (
+rd /s /q $(OutDir)\include\opus
+cd ../
+cd $(ProjectDir)
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -255,6 +265,11 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist $(OutDir)\include\opus (
+rd /s /q $(OutDir)\include\opus
+cd ../
+cd $(ProjectDir)
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -290,6 +305,11 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist $(OutDir)\include\opus (
+rd /s /q $(OutDir)\include\opus
+cd ../
+cd $(ProjectDir)
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -338,6 +358,11 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist $(OutDir)\include\opus (
+rd /s /q $(OutDir)\include\opus
+cd ../
+cd $(ProjectDir)
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -386,6 +411,11 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist $(OutDir)\include\opus (
+rd /s /q $(OutDir)\include\opus
+cd ../
+cd $(ProjectDir)
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -433,6 +463,11 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist $(OutDir)\include\opus (
+rd /s /q $(OutDir)\include\opus
+cd ../
+cd $(ProjectDir)
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
@@ -480,6 +515,11 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist $(OutDir)\include\opus (
+rd /s /q $(OutDir)\include\opus
+cd ../
+cd $(ProjectDir)
 )</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
