@@ -1,13 +1,7 @@
-###############################################################################
-# Set default behavior to automatically normalize line endings.
-###############################################################################
-#* text=auto
-SMC/*.sln       text=auto
-SMC/*.vcxproj   text=auto
-SMC/*.vcproj    text=auto
-
-
 .gitignore		export-ignore
 .gitattributes		export-ignore
 
 update_version		export-ignore
+*.sln              text=auto
+*.vcxproj          text=auto
+*.vcxproj.filters  text=auto
