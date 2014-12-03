@@ -2,6 +2,3 @@
 .gitattributes		export-ignore
 
 update_version		export-ignore
-*.sln              text=auto
-*.vcxproj          text=auto
-*.vcxproj.filters  text=auto
