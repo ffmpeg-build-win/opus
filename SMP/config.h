@@ -42,6 +42,4 @@ POSSIBILITY OF SUCH DAMAGE.
 #define __SSE__               1
 #endif
 
-#include "version.h"
-
 #endif /* CONFIG_H */

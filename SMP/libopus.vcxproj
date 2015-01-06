@@ -883,7 +883,6 @@ cd $(ProjectDir)
     <ClInclude Include="..\silk\typedef.h" />
     <ClInclude Include="..\src\opus_private.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="version.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
