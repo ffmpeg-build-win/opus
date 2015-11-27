@@ -210,7 +210,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0502;WIN32;_LIB;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4244;4334;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -223,6 +223,7 @@
       <OutputFile>$(OutDir)\lib\x86\$(TargetName)$(TargetExt)</OutputFile>
       <TargetMachine>MachineX86</TargetMachine>
       <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>mkdir $(OutDir)\include
@@ -237,6 +238,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
 )
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
@@ -250,7 +254,7 @@ cd $(ProjectDir)
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0600;WIN32;WIN64;_LIB;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4244;4334;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -263,6 +267,7 @@ cd $(ProjectDir)
       <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
       <TargetMachine>MachineX64</TargetMachine>
       <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>mkdir $(OutDir)\include
@@ -278,6 +283,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
       <Command>if exist ..\config.h (
 del ..\config.h
 )
+if exist ..\version.h (
+del ..\version.h
+)
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
 cd ../
@@ -290,7 +298,7 @@ cd $(ProjectDir)
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0502;OPUS_BUILD=1;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4244;4334;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -319,6 +327,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
       <Command>if exist ..\config.h (
 del ..\config.h
 )
+if exist ..\version.h (
+del ..\version.h
+)
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
 cd ../
@@ -331,7 +342,7 @@ cd $(ProjectDir)
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0600;OPUS_BUILD=1;WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4244;4334;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -359,6 +370,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
       <Command>if exist ..\config.h (
 del ..\config.h
 )
+if exist ..\version.h (
+del ..\version.h
+)
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
 cd ../
@@ -381,7 +395,7 @@ cd $(ProjectDir)
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0502;WIN32;_LIB;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
@@ -397,6 +411,7 @@ cd $(ProjectDir)
       <OutputFile>$(OutDir)\lib\x86\$(TargetName)$(TargetExt)</OutputFile>
       <TargetMachine>MachineX86</TargetMachine>
       <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>mkdir $(OutDir)\include
@@ -411,6 +426,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
 )
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
@@ -434,7 +452,7 @@ cd $(ProjectDir)
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0502;WIN32;_LIB;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
@@ -450,6 +468,7 @@ cd $(ProjectDir)
       <OutputFile>$(OutDir)\lib\x86\$(TargetName)$(TargetExt)</OutputFile>
       <TargetMachine>MachineX86</TargetMachine>
       <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>mkdir $(OutDir)\include
@@ -464,6 +483,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
 )
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
@@ -487,7 +509,7 @@ cd $(ProjectDir)
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0600;WIN32;WIN64;_LIB;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
@@ -503,6 +525,7 @@ cd $(ProjectDir)
       <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
       <TargetMachine>MachineX64</TargetMachine>
       <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>mkdir $(OutDir)\include
@@ -517,6 +540,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
 )
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
@@ -540,7 +566,7 @@ cd $(ProjectDir)
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0600;WIN32;WIN64;_LIB;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <InterproceduralOptimization>SingleFile</InterproceduralOptimization>
@@ -556,6 +582,7 @@ cd $(ProjectDir)
       <OutputFile>$(OutDir)\lib\x64\$(TargetName)$(TargetExt)</OutputFile>
       <TargetMachine>MachineX64</TargetMachine>
       <SubSystem>Windows</SubSystem>
+      <AdditionalOptions>/IGNORE:4221 %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PostBuildEvent>
       <Command>mkdir $(OutDir)\include
@@ -570,6 +597,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
     <PreBuildEvent>
       <Command>if exist ..\config.h (
 del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
 )
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
@@ -593,7 +623,7 @@ cd $(ProjectDir)
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0502;OPUS_BUILD=1;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4244;4334;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -623,6 +653,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
       <Command>if exist ..\config.h (
 del ..\config.h
 )
+if exist ..\version.h (
+del ..\version.h
+)
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
 cd ../
@@ -645,7 +678,7 @@ cd $(ProjectDir)
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
-      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\;..\silk;..\celt;..\include;..\silk\float;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;_WIN32_WINNT=0x0600;OPUS_BUILD=1;WIN32;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
       <DisableSpecificWarnings>4996;4244;4334;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -674,6 +707,9 @@ copy ..\COPYING $(OutDir)\licenses\opus.txt</Command>
       <Command>if exist ..\config.h (
 del ..\config.h
 )
+if exist ..\version.h (
+del ..\version.h
+)
 if exist $(OutDir)\include\opus (
 rd /s /q $(OutDir)\include\opus
 cd ../
@@ -700,6 +736,12 @@ cd $(ProjectDir)
     <ClCompile Include="..\celt\quant_bands.c" />
     <ClCompile Include="..\celt\rate.c" />
     <ClCompile Include="..\celt\vq.c" />
+    <ClCompile Include="..\celt\x86\celt_lpc_sse.c" />
+    <ClCompile Include="..\celt\x86\pitch_sse.c" />
+    <ClCompile Include="..\celt\x86\pitch_sse2.c" />
+    <ClCompile Include="..\celt\x86\pitch_sse4_1.c" />
+    <ClCompile Include="..\celt\x86\x86cpu.c" />
+    <ClCompile Include="..\celt\x86\x86_celt_map.c" />
     <ClCompile Include="..\silk\A2NLSF.c" />
     <ClCompile Include="..\silk\ana_filt_bank_1.c" />
     <ClCompile Include="..\silk\biquad_alt.c" />
@@ -807,6 +849,11 @@ cd $(ProjectDir)
     <ClCompile Include="..\silk\table_LSF_cos.c" />
     <ClCompile Include="..\silk\VAD.c" />
     <ClCompile Include="..\silk\VQ_WMat_EC.c" />
+    <ClCompile Include="..\silk\x86\NSQ_del_dec_sse.c" />
+    <ClCompile Include="..\silk\x86\NSQ_sse.c" />
+    <ClCompile Include="..\silk\x86\VAD_sse.c" />
+    <ClCompile Include="..\silk\x86\VQ_WMat_EC_sse.c" />
+    <ClCompile Include="..\silk\x86\x86_silk_map.c" />
     <ClCompile Include="..\src\analysis.c" />
     <ClCompile Include="..\src\mlp.c" />
     <ClCompile Include="..\src\mlp_data.c" />
@@ -848,6 +895,9 @@ cd $(ProjectDir)
     <ClInclude Include="..\celt\static_modes_fixed.h" />
     <ClInclude Include="..\celt\static_modes_float.h" />
     <ClInclude Include="..\celt\vq.h" />
+    <ClInclude Include="..\celt\x86\celt_lpc_sse.h" />
+    <ClInclude Include="..\celt\x86\pitch_sse.h" />
+    <ClInclude Include="..\celt\x86\x86cpu.h" />
     <ClInclude Include="..\celt\_kiss_fft_guts.h" />
     <ClInclude Include="..\include\opus.h" />
     <ClInclude Include="..\include\opus_defines.h" />
@@ -876,6 +926,8 @@ cd $(ProjectDir)
     <ClInclude Include="..\silk\tables.h" />
     <ClInclude Include="..\silk\tuning_parameters.h" />
     <ClInclude Include="..\silk\typedef.h" />
+    <ClInclude Include="..\silk\x86\main_sse.h" />
+    <ClInclude Include="..\silk\x86\SigProc_FIX_sse.h" />
     <ClInclude Include="..\src\opus_private.h" />
     <ClInclude Include="config.h" />
   </ItemGroup>

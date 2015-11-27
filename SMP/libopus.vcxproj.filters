@@ -22,14 +22,26 @@
     <Filter Include="Source Files\silk">
       <UniqueIdentifier>{5e99fcc5-0251-487c-b409-673b9b2517e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\silk\silk_float">
-      <UniqueIdentifier>{49f028dc-2b31-4b0a-be12-71e3c308e0b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\silk\silk_float">
-      <UniqueIdentifier>{41b7ccb5-1511-40b0-b27e-d169ec36a291}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\include">
       <UniqueIdentifier>{8ef41bd2-0b91-425a-805e-e0163c228a2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\celt\x86">
+      <UniqueIdentifier>{e5d9caee-5f7a-49e9-aa86-df38bfe17d9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\celt\x86">
+      <UniqueIdentifier>{fc70dc8b-9a90-454e-8d70-31f67bdf28e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\silk\x86">
+      <UniqueIdentifier>{147a96c4-3a94-4049-ae11-0c8f8e48012d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\silk\x86">
+      <UniqueIdentifier>{a70fc533-61b6-4bc8-86a3-52dfbc945285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\silk\float">
+      <UniqueIdentifier>{49f028dc-2b31-4b0a-be12-71e3c308e0b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\silk\float">
+      <UniqueIdentifier>{41b7ccb5-1511-40b0-b27e-d169ec36a291}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -325,97 +337,97 @@
       <Filter>Source Files\silk</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\energy_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\find_LPC_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\find_LTP_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\find_pitch_lags_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\find_pred_coefs_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\inner_product_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\k2a_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\levinsondurbin_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\LPC_analysis_filter_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\LPC_inv_pred_gain_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\LTP_analysis_filter_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\LTP_scale_ctrl_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\noise_shape_analysis_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\pitch_analysis_core_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\prefilter_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\process_gains_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\regularize_correlations_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\residual_energy_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\scale_copy_vector_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\scale_vector_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\schur_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\solve_LS_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\sort_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\warped_autocorrelation_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\wrappers_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\apply_sine_window_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\autocorrelation_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\burg_modified_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\bwexpander_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\corrMatrix_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\silk\float\encode_frame_FLP.c">
-      <Filter>Source Files\silk\silk_float</Filter>
+      <Filter>Source Files\silk\float</Filter>
     </ClCompile>
     <ClCompile Include="..\src\mlp_data.c">
       <Filter>Source Files</Filter>
@@ -440,6 +452,39 @@
     </ClCompile>
     <ClCompile Include="..\src\analysis.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\celt\x86\x86_celt_map.c">
+      <Filter>Source Files\celt\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\celt\x86\x86cpu.c">
+      <Filter>Source Files\celt\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\celt\x86\celt_lpc_sse.c">
+      <Filter>Source Files\celt\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\celt\x86\pitch_sse.c">
+      <Filter>Source Files\celt\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\celt\x86\pitch_sse2.c">
+      <Filter>Source Files\celt\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\celt\x86\pitch_sse4_1.c">
+      <Filter>Source Files\celt\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\silk\x86\VQ_WMat_EC_sse.c">
+      <Filter>Source Files\silk\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\silk\x86\x86_silk_map.c">
+      <Filter>Source Files\silk\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\silk\x86\NSQ_del_dec_sse.c">
+      <Filter>Source Files\silk\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\silk\x86\NSQ_sse.c">
+      <Filter>Source Files\silk\x86</Filter>
+    </ClCompile>
+    <ClCompile Include="..\silk\x86\VAD_sse.c">
+      <Filter>Source Files\silk\x86</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -591,13 +636,13 @@
       <Filter>Header Files\silk</Filter>
     </ClInclude>
     <ClInclude Include="..\silk\float\SigProc_FLP.h">
-      <Filter>Header Files\silk\silk_float</Filter>
+      <Filter>Header Files\silk\float</Filter>
     </ClInclude>
     <ClInclude Include="..\silk\float\structs_FLP.h">
-      <Filter>Header Files\silk\silk_float</Filter>
+      <Filter>Header Files\silk\float</Filter>
     </ClInclude>
     <ClInclude Include="..\silk\float\main_FLP.h">
-      <Filter>Header Files\silk\silk_float</Filter>
+      <Filter>Header Files\silk\float</Filter>
     </ClInclude>
     <ClInclude Include="config.h">
       <Filter>Header Files</Filter>
@@ -616,6 +661,21 @@
     </ClInclude>
     <ClInclude Include="..\include\opus_types.h">
       <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\celt\x86\pitch_sse.h">
+      <Filter>Header Files\celt\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="..\celt\x86\x86cpu.h">
+      <Filter>Header Files\celt\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="..\celt\x86\celt_lpc_sse.h">
+      <Filter>Header Files\celt\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="..\silk\x86\main_sse.h">
+      <Filter>Header Files\silk\x86</Filter>
+    </ClInclude>
+    <ClInclude Include="..\silk\x86\SigProc_FIX_sse.h">
+      <Filter>Header Files\silk\x86</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
