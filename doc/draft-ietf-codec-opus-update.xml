@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-valin-codec-opus-update-00"
+<rfc category="std" docName="draft-ietf-codec-opus-update-01"
      ipr="trust200902">
   <front>
     <title abbrev="Opus Update">Updates to the Opus Audio Codec</title>
@@ -19,7 +19,7 @@
 <organization>Mozilla Corporation</organization>
 <address>
 <postal>
-<street>650 Castro Street</street>
+<street>331 E. Evelyn Avenue</street>
 <city>Mountain View</city>
 <region>CA</region>
 <code>94041</code>
@@ -30,39 +30,24 @@
 </address>
 </author>
 
-<author initials="T." surname="Terriberry" fullname="Timothy B. Terriberry">
-<organization>Mozilla Corporation</organization>
-<address>
-<postal>
-<street>650 Castro Street</street>
-<city>Mountain View</city>
-<region>CA</region>
-<code>94041</code>
-<country>USA</country>
-</postal>
-<phone>+1 650 903-0800</phone>
-<email>tterriberry@mozilla.com</email>
-</address>
-</author>
-
 <author initials="K." surname="Vos" fullname="Koen Vos">
-<organization>Skype Technologies S.A.</organization>
+<organization>vocTone</organization>
 <address>
 <postal>
-<street>Soder Malarstrand 43</street>
-<city>Stockholm</city>
+<street></street>
+<city></city>
 <region></region>
-<code>11825</code>
-<country>SE</country>
+<code></code>
+<country></country>
 </postal>
-<phone>+46 73 085 7619</phone>
-<email>koen.vos@skype.net</email>
+<phone></phone>
+<email>koenvos74@gmail.com</email>
 </address>
 </author>
 
 
 
-    <date day="12" month="July" year="2013" />
+    <date day="4" month="September" year="2014" />
 
     <abstract>
       <t>This document addresses minor issues that were found in the specification
@@ -72,8 +57,8 @@
 
   <middle>
     <section title="Introduction">
-      <t>This document address minor issues that were discovered in the reference
-      implementation of the Opus codec that serves as the specification in 
+      <t>This document addresses minor issues that were discovered in the reference
+      implementation of the Opus codec that serves as the specification in
       <xref target="RFC6716">RFC 6716</xref>. Only issues affecting the decoder are
       listed here. An up-to-date implementation of the Opus encoder can be found at
       http://opus-codec.org/. The updated specification remains fully compatible with
@@ -99,7 +84,7 @@
      for( n = 0; n < DECODER_NUM_CHANNELS; n++ ) {
          ret  = silk_init_decoder( &channel_state[ n ] );
      }
-+    silk_memset(&((silk_decoder *)decState)->sStereo, 0, 
++    silk_memset(&((silk_decoder *)decState)->sStereo, 0,
 +                sizeof(((silk_decoder *)decState)->sStereo));
 +    /* Not strictly needed, but it's cleaner that way */
 +    ((silk_decoder *)decState)->prev_decode_only_middle = 0;
@@ -147,8 +132,8 @@
          by a compressed packet more than about 16 MB long, so it's not a problem
          for RTP. In theory, it <spanx style="emph">could</spanx> crash a file
          decoder (e.g. Opus in Ogg) if the memory just after the incoming packet
-         is out-of-range, but that could not be achieved when attempted in a production
-         application built using an affected version of the Opus decoder.</t>
+         is out-of-range, but our attempts to trigger such a crash in a production
+         application built using an affected version of the Opus decoder failed.</t>
     </section>
 
     <section anchor="resampler" title="Resampler buffer">
@@ -157,10 +142,10 @@
     <t>The calls to memcpy() were using sizeof(opus_int32), but the type of the
         local buffer was opus_int16.</t>
     <t>Because the size was wrong, this potentially allowed the source
-        and destination regions of the memcpy overlap.
+        and destination regions of the memcpy() to overlap.
           We <spanx style="emph">believe</spanx> that nSamplesIn is at least fs_in_khZ,
           which is at least 8.
-       Since RESAMPLER_ORDER_FIR_12 is only 8,that should not be a problem once
+       Since RESAMPLER_ORDER_FIR_12 is only 8, that should not be a problem once
        the type size is fixed.</t>
           <t>The size of the buffer used RESAMPLER_MAX_BATCH_SIZE_IN, but the
         data stored in it was actually _twice_ the input batch size
@@ -172,23 +157,25 @@
      the batch sizes are reasonable enough that none of the issues above
      was ever a problem. However, proving that is non-obvious.
     </t>
-    <t>The code can be fixed by applying the following changes to like 70 of silk/resampler_private_IIR_FIR.c:
+    <t>The code can be fixed by applying the following changes to line 70 of silk/resampler_private_IIR_FIR.c:
 <figure>
 <artwork><![CDATA[
-     opus_int16                      out[],          /* O    Output signal               */
-     const opus_int16                in[],           /* I    Input signal                */
-     opus_int32                      inLen           /* I    Number of input samples     */
  )
  {
-     silk_resampler_state_struct *S = (silk_resampler_state_struct *)SS;
+     silk_resampler_state_struct *S = \
+(silk_resampler_state_struct *)SS;
      opus_int32 nSamplesIn;
      opus_int32 max_index_Q16, index_increment_Q16;
--    opus_int16 buf[ RESAMPLER_MAX_BATCH_SIZE_IN + RESAMPLER_ORDER_FIR_12 ];
-+    opus_int16 buf[ 2*RESAMPLER_MAX_BATCH_SIZE_IN + RESAMPLER_ORDER_FIR_12 ];
+-    opus_int16 buf[ RESAMPLER_MAX_BATCH_SIZE_IN + \
+RESAMPLER_ORDER_FIR_12 ];
++    opus_int16 buf[ 2*RESAMPLER_MAX_BATCH_SIZE_IN + \
+RESAMPLER_ORDER_FIR_12 ];
  
      /* Copy buffered samples to start of buffer */
--    silk_memcpy( buf, S->sFIR, RESAMPLER_ORDER_FIR_12 * sizeof( opus_int32 ) );
-+    silk_memcpy( buf, S->sFIR, RESAMPLER_ORDER_FIR_12 * sizeof( opus_int16 ) );
+-    silk_memcpy( buf, S->sFIR, RESAMPLER_ORDER_FIR_12 \
+* sizeof( opus_int32 ) );
++    silk_memcpy( buf, S->sFIR, RESAMPLER_ORDER_FIR_12 \
+* sizeof( opus_int16 ) );
  
      /* Iterate over blocks of frameSizeIn input samples */
      index_increment_Q16 = S->invRatio_Q16;
@@ -196,42 +183,57 @@
          nSamplesIn = silk_min( inLen, S->batchSize );
  
          /* Upsample 2x */
-         silk_resampler_private_up2_HQ( S->sIIR, &buf[ RESAMPLER_ORDER_FIR_12 ], in, nSamplesIn );
+         silk_resampler_private_up2_HQ( S->sIIR, &buf[ \
+RESAMPLER_ORDER_FIR_12 ], in, nSamplesIn );
  
-         max_index_Q16 = silk_LSHIFT32( nSamplesIn, 16 + 1 );         /* + 1 because 2x upsampling */
-         out = silk_resampler_private_IIR_FIR_INTERPOL( out, buf, max_index_Q16, index_increment_Q16 );
+         max_index_Q16 = silk_LSHIFT32( nSamplesIn, 16 + 1 \
+);         /* + 1 because 2x upsampling */
+         out = silk_resampler_private_IIR_FIR_INTERPOL( out, \
+buf, max_index_Q16, index_increment_Q16 );
          in += nSamplesIn;
          inLen -= nSamplesIn;
  
          if( inLen > 0 ) {
-             /* More iterations to do; copy last part of filtered signal to beginning of buffer */
--            silk_memcpy( buf, &buf[ nSamplesIn << 1 ], RESAMPLER_ORDER_FIR_12 * sizeof( opus_int32 ) );
-+            silk_memmove( buf, &buf[ nSamplesIn << 1 ], RESAMPLER_ORDER_FIR_12 * sizeof( opus_int16 ) );
+             /* More iterations to do; copy last part of \
+filtered signal to beginning of buffer */
+-            silk_memcpy( buf, &buf[ nSamplesIn << 1 ], \
+RESAMPLER_ORDER_FIR_12 * sizeof( opus_int32 ) );
++            silk_memmove( buf, &buf[ nSamplesIn << 1 ], \
+RESAMPLER_ORDER_FIR_12 * sizeof( opus_int16 ) );
          } else {
              break;
          }
      }
  
-     /* Copy last part of filtered signal to the state for the next call */
--    silk_memcpy( S->sFIR, &buf[ nSamplesIn << 1 ], RESAMPLER_ORDER_FIR_12 * sizeof( opus_int32 ) );
-+    silk_memcpy( S->sFIR, &buf[ nSamplesIn << 1 ], RESAMPLER_ORDER_FIR_12 * sizeof( opus_int16 ) );
+     /* Copy last part of filtered signal to the state for \
+the next call */
+-    silk_memcpy( S->sFIR, &buf[ nSamplesIn << 1 ], \
+RESAMPLER_ORDER_FIR_12 * sizeof( opus_int32 ) );
++    silk_memcpy( S->sFIR, &buf[ nSamplesIn << 1 ], \
+RESAMPLER_ORDER_FIR_12 * sizeof( opus_int16 ) );
  }
 ]]></artwork>
 </figure>
+    Note: due to RFC formatting conventions, lines exceeding the column width
+    in the patch above are split using a backslash character. The backslashes
+    at the end of a line and the white space at the beginning
+    of the following line are not part of the patch. A properly formatted patch
+    including the three changes above is available at
+    <eref target="http://jmvalin.ca/misc_stuff/opus_update.patch"/>.
     </t>
     </section>
-    
+
     <section title="Downmix to Mono">
       <t>The last issue is not strictly a bug, but it is an issue that has been reported
-      when downmixing Opus decoded stream to mono, whether this is done inside the decoder
-      or as a post-processing on the stereo decoder output. Opus intensity stereo allows
-      optionally coding the two channels 180-degrees out of phase on a per-band basis. 
+      when downmixing an Opus decoded stream to mono, whether this is done inside the decoder
+      or as a post-processing step on the stereo decoder output. Opus intensity stereo allows
+      optionally coding the two channels 180-degrees out of phase on a per-band basis.
       This provides better stereo quality than forcing the two channels to be in phase,
       but when the output is downmixed to mono, the energy in the affected bands is cancelled
       sometimes resulting in audible artefacts.
       </t>
-      <t>A possible work-around for this issue would be to optionally allow the decoder to
-      not apply the 180-degree phase shift when the output is meant to be downmixed (inside or
+      <t>As a work-around for this issue, the decoder MAY choose not to apply the 180-degree
+      phase shift when the output is meant to be downmixed (inside or
       outside of the decoder).
       </t>
     </section>
