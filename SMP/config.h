@@ -40,6 +40,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #define OPUS_X86_MAY_HAVE_SSE
 #define OPUS_X86_MAY_HAVE_SSE2
 #define OPUS_X86_MAY_HAVE_SSE4_1
+#define OPUS_X86_MAY_HAVE_AVX
 
 /* Presume SSE functions, if compiled to use SSE/SSE2/AVX (note that AMD64 implies SSE2, and AVX
    implies SSE4.1) */
@@ -51,9 +52,10 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 #if defined(__AVX__)
 #define OPUS_X86_PRESUME_SSE4_1 1
+#define OPUS_X86_PRESUME_AVX 1
 #endif
 
-#if !defined(OPUS_X86_PRESUME_SSE4_1) || !defined(OPUS_X86_PRESUME_SSE2) || !defined(OPUS_X86_PRESUME_SSE)
+#if !defined(OPUS_X86_PRESUME_AVX) || !defined(OPUS_X86_PRESUME_SSE4_1) || !defined(OPUS_X86_PRESUME_SSE2) || !defined(OPUS_X86_PRESUME_SSE)
 #define OPUS_HAVE_RTCD 1
 #endif
 
