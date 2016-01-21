@@ -4,14 +4,17 @@
 <!ENTITY rfc3533 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3533.xml'>
 <!ENTITY rfc3629 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.3629.xml'>
 <!ENTITY rfc4732 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.4732.xml'>
+<!ENTITY rfc5226 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml'>
 <!ENTITY rfc5334 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.5334.xml'>
 <!ENTITY rfc6381 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6381.xml'>
 <!ENTITY rfc6716 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6716.xml'>
 <!ENTITY rfc6982 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.6982.xml'>
+<!ENTITY rfc7587 PUBLIC '' 'http://xml.resource.org/public/rfc/bibxml/reference.RFC.7587.xml'>
 ]>
 <?rfc toc="yes" symrefs="yes" ?>
 
-<rfc ipr="trust200902" category="std" docName="draft-ietf-codec-oggopus-08">
+<rfc ipr="trust200902" category="std" docName="draft-ietf-codec-oggopus-09"
+ updates="5334">
 
 <front>
 <title abbrev="Ogg Opus">Ogg Encapsulation for the Opus Audio Codec</title>
@@ -60,7 +63,7 @@
 </address>
 </author>
 
-<date day="6" month="July" year="2015"/>
+<date day="23" month="November" year="2015"/>
 <area>RAI</area>
 <workgroup>codec</workgroup>
 
@@ -70,14 +73,6 @@ This document defines the Ogg encapsulation for the Opus interactive speech and
  audio codec.
 This allows data encoded in the Opus format to be stored in an Ogg logical
  bitstream.
-Ogg encapsulation provides Opus with a long-term storage format supporting
- all of the essential features, including metadata, fast and accurate seeking,
- corruption detection, recapture after errors, low overhead, and the ability to
- multiplex Opus with other codecs (including video) with minimal buffering.
-It also provides a live streamable format, capable of delivery over a reliable
- stream-oriented transport, without requiring all the data, or even the total
- length of the data, up-front, in a form that is identical to the on-disk
- storage format.
 </t>
 </abstract>
 </front>
@@ -90,6 +85,14 @@ The IETF Opus codec is a low-latency audio codec optimized for both voice and
 See <xref target="RFC6716"/> for technical details.
 This document defines the encapsulation of Opus in a continuous, logical Ogg
  bitstream&nbsp;<xref target="RFC3533"/>.
+Ogg encapsulation provides Opus with a long-term storage format supporting
+ all of the essential features, including metadata, fast and accurate seeking,
+ corruption detection, recapture after errors, low overhead, and the ability to
+ multiplex Opus with other codecs (including video) with minimal buffering.
+It also provides a live streamable format, capable of delivery over a reliable
+ stream-oriented transport, without requiring all the data, or even the total
+ length of the data, up-front, in a form that is identical to the on-disk
+ storage format.
 </t>
 <t>
 Ogg bitstreams are made up of a series of 'pages', each of which contains data
@@ -104,8 +107,8 @@ A single page can contain up to 65,025 octets of packet data from up to 255
 Packets can be split arbitrarily across pages, and continued from one page to
  the next (allowing packets much larger than would fit on a single page).
 Each page contains 'lacing values' that indicate how the data is partitioned
- into packets, allowing a demuxer to recover the packet boundaries without
- examining the encoded data.
+ into packets, allowing a demultiplexer (demuxer) to recover the packet
+ boundaries without examining the encoded data.
 A packet is said to 'complete' on a page when the page contains the final
  lacing value corresponding to that packet.
 </t>
@@ -127,14 +130,6 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
  document are to be interpreted as described in <xref target="RFC2119"/>.
 </t>
 
-<t>
-Implementations that fail to satisfy one or more "MUST" requirements are
- considered non-compliant.
-Implementations that satisfy all "MUST" requirements, but fail to satisfy one
- or more "SHOULD" requirements are said to be "conditionally compliant".
-All other implementations are "unconditionally compliant".
-</t>
-
 </section>
 
 <section anchor="packet_organization" title="Packet Organization">
@@ -143,21 +138,18 @@ An Ogg Opus stream is organized as follows.
 </t>
 <t>
 There are two mandatory header packets.
-The granule position of the pages on which these packets complete MUST be zero.
-</t>
-<t>
 The first packet in the logical Ogg bitstream MUST contain the identification
  (ID) header, which uniquely identifies a stream as Opus audio.
 The format of this header is defined in <xref target="id_header"/>.
-It MUST be placed alone (without any other packet data) on the first page of
- the logical Ogg bitstream, and MUST complete on that page.
-This page MUST have its 'beginning of stream' flag set.
+It is placed alone (without any other packet data) on the first page of
+ the logical Ogg bitstream, and completes on that page.
+This page has its 'beginning of stream' flag set.
 </t>
 <t>
 The second packet in the logical Ogg bitstream MUST contain the comment header,
  which contains user-supplied metadata.
 The format of this header is defined in <xref target="comment_header"/>.
-It MAY span one or more pages, beginning on the second page of the logical
+It MAY span multiple pages, beginning on the second page of the logical
  stream.
 However many pages it spans, the comment header packet MUST finish the page on
  which it completes.
@@ -173,40 +165,59 @@ The value N is specified in the ID header (see
  logical Ogg bitstream.
 </t>
 <t>
-The first N-1 Opus packets, if any, are packed one after another into the Ogg
- packet, using the self-delimiting framing from Appendix&nbsp;B of
+The first (N&nbsp;-&nbsp;1) Opus packets, if any, are packed one after another
+ into the Ogg packet, using the self-delimiting framing from Appendix&nbsp;B of
  <xref target="RFC6716"/>.
 The remaining Opus packet is packed at the end of the Ogg packet using the
  regular, undelimited framing from Section&nbsp;3 of <xref target="RFC6716"/>.
 All of the Opus packets in a single Ogg packet MUST be constrained to have the
  same duration.
-A decoder SHOULD treat any Opus packet whose duration is different from that of
- the first Opus packet in an Ogg packet as if it were a malformed Opus packet
- with an invalid TOC sequence.
+An implementation of this specification SHOULD treat any Opus packet whose
+ duration is different from that of the first Opus packet in an Ogg packet as
+ if it were a malformed Opus packet with an invalid Table Of Contents (TOC)
+ sequence.
 </t>
 <t>
-The coding mode (SILK, Hybrid, or CELT), audio bandwidth, channel count,
- duration (frame size), and number of frames per packet, are indicated in the
- TOC (table of contents) sequence at the beginning of each Opus packet, as
- described in Section&nbsp;3.1 of&nbsp;<xref target="RFC6716"/>.
-The combination of mode, audio bandwidth, and frame size is referred to as
- the configuration of an Opus packet.
+The TOC sequence at the beginning of each Opus packet indicates the coding
+ mode, audio bandwidth, channel count, duration (frame size), and number of
+ frames per packet, as described in Section&nbsp;3.1
+ of&nbsp;<xref target="RFC6716"/>.
+The coding mode is one of SILK, Hybrid, or Constrained Energy Lapped Transform
+ (CELT).
+The combination of coding mode, audio bandwidth, and frame size is referred to
+ as the configuration of an Opus packet.
 </t>
 <t>
-The first audio data page SHOULD NOT have the 'continued packet' flag set
- (which would indicate the first audio data packet is continued from a previous
- page).
-Packets MUST be placed into Ogg pages in order until the end of stream.
-Audio packets MAY span page boundaries.
-A decoder MUST treat a zero-octet audio data packet as if it were a malformed
- Opus packet as described in Section&nbsp;3.4 of&nbsp;<xref target="RFC6716"/>.
+Packets are placed into Ogg pages in order until the end of stream.
+Audio data packets might span page boundaries.
+The first audio data page could have the 'continued packet' flag set
+ (indicating the first audio data packet is continued from a previous page) if,
+ for example, it was a live stream joined mid-broadcast, with the headers
+ pasted on the front.
+A demuxer SHOULD NOT attempt to decode the data for the first packet on a page
+ with the 'continued packet' flag set if the previous page with packet data
+ does not end in a continued packet (i.e., did not end with a lacing value of
+ 255) or if the page sequence numbers are not consecutive, unless the demuxer
+ has some special knowledge that would allow it to interpret this data
+ despite the missing pieces.
+An implementation MUST treat a zero-octet audio data packet as if it were a
+ malformed Opus packet as described in
+ Section&nbsp;3.4 of&nbsp;<xref target="RFC6716"/>.
 </t>
 <t>
-The last page SHOULD have the 'end of stream' flag set, but implementations
- need to be prepared to deal with truncated streams that do not have a page
- marked 'end of stream'.
-The final packet on the last page SHOULD NOT be a continued packet, i.e., the
- final lacing value SHOULD be less than 255.
+A logical stream ends with a page with the 'end of stream' flag set, but
+ implementations need to be prepared to deal with truncated streams that do not
+ have a page marked 'end of stream'.
+There is no reason for the final packet on the last page to be a continued
+ packet, i.e., for the final lacing value to be less than 255.
+However, demuxers might encounter such streams, possibly as the result of a
+ transfer that did not complete or of corruption.
+A demuxer SHOULD NOT attempt to decode the data from a packet that continues
+ onto a subsequent page (i.e., when the page ends with a lacing value of 255)
+ if the next page with packet data does not have the 'continued packet' flag
+ set or does not exist, or if the page sequence numbers are not consecutive,
+ unless the demuxer has some special knowledge that would allow it to interpret
+ this data despite the missing pieces.
 There MUST NOT be any more pages in an Opus logical bitstream after a page
  marked 'end of stream'.
 </t>
@@ -214,12 +225,23 @@ There MUST NOT be any more pages in an Opus logical bitstream after a page
 
 <section anchor="granpos" title="Granule Position">
 <t>
+The granule position MUST be zero for the ID header page and the
+ page where the comment header completes.
+That is, the first page in the logical stream, and the last header
+ page before the first audio data page both have a granule position of zero.
+</t>
+<t>
 The granule position of an audio data page encodes the total number of PCM
  samples in the stream up to and including the last fully-decodable sample from
  the last packet completed on that page.
+The granule position of the first audio data page will usually be larger than
+ zero, as described in <xref target="start_granpos_restrictions"/>.
+</t>
+
+<t>
 A page that is entirely spanned by a single packet (that completes on a
- subsequent page) has no granule position, and the granule position field MUST
- be set to the special value '-1' in two's complement.
+ subsequent page) has no granule position, and the granule position field is
+ set to the special value '-1' in two's complement.
 </t>
 
 <t>
@@ -259,8 +281,14 @@ For this to work, there cannot be any gaps.
 <section anchor="gap-repair" title="Repairing Gaps in Real-time Streams">
 <t>
 In order to support capturing a real-time stream that has lost or not
- transmitted packets, a muxer SHOULD emit packets that explicitly request the
- use of Packet Loss Concealment (PLC) in place of the missing packets.
+ transmitted packets, a multiplexer (muxer) SHOULD emit packets that explicitly
+ request the use of Packet Loss Concealment (PLC) in place of the missing
+ packets.
+Implementations that fail to do so still MUST NOT increment the granule
+ position for a page by anything other than the number of samples contained in
+ packets that actually complete on that page.
+</t>
+<t>
 Only gaps that are a multiple of 2.5&nbsp;ms are repairable, as these are the
  only durations that can be created by packet loss or discontinuous
  transmission.
@@ -359,16 +387,17 @@ Therefore, the first few samples produced by the decoder do not correspond to
 These samples need to be stored and decoded, as Opus is an asymptotically
  convergent predictive codec, meaning the decoded contents of each frame depend
  on the recent history of decoder inputs.
-However, a decoder will want to skip these samples after decoding them.
+However, a player will want to skip these samples after decoding them.
 </t>
 
 <t>
 A 'pre-skip' field in the ID header (see <xref target="id_header"/>) signals
- the number of samples which SHOULD be skipped (decoded but discarded) at the
- beginning of the stream.
+ the number of samples that SHOULD be skipped (decoded but discarded) at the
+ beginning of the stream, though some specific applications might have a reason
+ for looking at that data.
 This amount need not be a multiple of 2.5&nbsp;ms, MAY be smaller than a single
  packet, or MAY span the contents of several packets.
-These samples are not valid audio, and SHOULD NOT be played.
+These samples are not valid audio.
 </t>
 
 <t>
@@ -394,32 +423,30 @@ In this case, a value of at least 3840&nbsp;samples (80&nbsp;ms) provides
 
 <section anchor="pcm_sample_position" title="PCM Sample Position">
 <t>
-<figure align="center">
-<preamble>
 The PCM sample position is determined from the granule position using the
  formula
-</preamble>
+</t>
+<figure align="center">
 <artwork align="center"><![CDATA[
 'PCM sample position' = 'granule position' - 'pre-skip' .
 ]]></artwork>
 </figure>
-</t>
 
 <t>
 For example, if the granule position of the first audio data page is 59,971,
  and the pre-skip is 11,971, then the PCM sample position of the last decoded
  sample from that page is 48,000.
-<figure align="center">
-<preamble>
+</t>
+<t>
 This can be converted into a playback time using the formula
-</preamble>
+</t>
+<figure align="center">
 <artwork align="center"><![CDATA[
                   'PCM sample position'
 'playback time' = --------------------- .
                          48000.0
 ]]></artwork>
 </figure>
-</t>
 
 <t>
 The initial PCM sample position before any samples are played is normally '0'.
@@ -438,7 +465,7 @@ However, to do so, Vorbis requires that the first audio data page contains
  exactly two packets, in order to allow the decoder to perform PCM position
  adjustments before needing to return any PCM data.
 Opus uses the pre-skip mechanism for this purpose instead, since the encoder
- MAY introduce more than a single packet's worth of latency, and since very
+ might introduce more than a single packet's worth of latency, and since very
  large packets in streams with a very large number of channels might not fit
  on a single page.
 </t>
@@ -485,10 +512,10 @@ On the other hand, a granule position that is smaller than the number of
  decoded samples prevents a demuxer from working backwards to assign each
  packet or each individual sample a valid granule position, since granule
  positions are non-negative.
-A decoder MUST reject as invalid any stream where the granule position is
- smaller than the number of samples contained in packets that complete on the
- first audio data page with a completed packet, unless that page has the 'end
- of stream' flag set.
+An implementation MUST reject as invalid any stream where the granule position
+ is smaller than the number of samples contained in packets that complete on
+ the first audio data page with a completed packet, unless that page has the
+ 'end of stream' flag set.
 It MAY defer this action until it decodes the last packet completed on that
  page.
 </t>
@@ -515,21 +542,21 @@ Both of these will be greater than '0' in this case.
 Seeking in Ogg files is best performed using a bisection search for a page
  whose granule position corresponds to a PCM position at or before the seek
  target.
-With appropriately weighted bisection, accurate seeking can be performed with
- just three or four bisections even in multi-gigabyte files.
-See <xref target="seeking"/> for general implementation guidance.
+With appropriately weighted bisection, accurate seeking can be performed in
+ just one or two bisections on average, even in multi-gigabyte files.
+See <xref target="seeking"/> for an example of general implementation guidance.
 </t>
 
 <t>
-When seeking within an Ogg Opus stream, the decoder SHOULD start decoding (and
- discarding the output) at least 3840&nbsp;samples (80&nbsp;ms) prior to the
- seek target in order to ensure that the output audio is correct by the time it
- reaches the seek target.
+When seeking within an Ogg Opus stream, an implementation SHOULD start decoding
+ (and discarding the output) at least 3840&nbsp;samples (80&nbsp;ms) prior to
+ the seek target in order to ensure that the output audio is correct by the
+ time it reaches the seek target.
 This 'pre-roll' is separate from, and unrelated to, the 'pre-skip' used at the
  beginning of the stream.
 If the point 80&nbsp;ms prior to the seek target comes before the initial PCM
- sample position, the decoder SHOULD start decoding from the beginning of the
- stream, applying pre-skip as normal, regardless of whether the pre-skip is
+ sample position, an implementation SHOULD start decoding from the beginning of
+ the stream, applying pre-skip as normal, regardless of whether the pre-skip is
  larger or smaller than 80&nbsp;ms, and then continue to discard samples
  to reach the seek target (if any).
 </t>
@@ -539,7 +566,7 @@ If the point 80&nbsp;ms prior to the seek target comes before the initial PCM
 
 <section anchor="headers" title="Header Packets">
 <t>
-An Opus stream contains exactly two mandatory header packets:
+An Ogg Opus logical stream contains exactly two mandatory header packets:
  an identification header and a comment header.
 </t>
 
@@ -570,7 +597,7 @@ An Opus stream contains exactly two mandatory header packets:
 <t>
 The fields in the identification (ID) header have the following meaning:
 <list style="numbers">
-<t><spanx style="strong">Magic Signature</spanx>:
+<t>Magic Signature:
 <vspace blankLines="1"/>
 This is an 8-octet (64-bit) field that allows codec identification and is
  human-readable.
@@ -589,7 +616,7 @@ Starting with "Op" helps distinguish it from audio data packets, as this is an
  invalid TOC sequence.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Version</spanx> (8 bits, unsigned):
+<t>Version (8 bits, unsigned):
 <vspace blankLines="1"/>
 The version number MUST always be '1' for this version of the encapsulation
  specification.
@@ -599,14 +626,14 @@ Implementations SHOULD treat streams where the upper four bits of the version
 That is, the version number can be split into "major" and "minor" version
  sub-fields, with changes to the "minor" sub-field (in the lower four bits)
  signaling compatible changes.
-For example, a decoder implementing this specification SHOULD accept any stream
+For example, an implementation of this specification SHOULD accept any stream
  with a version number of '15' or less, and SHOULD assume any stream with a
  version number '16' or greater is incompatible.
 The initial version '1' was chosen to keep implementations from relying on this
  octet as a null terminator for the "OpusHead" string.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Output Channel Count</spanx> 'C' (8 bits, unsigned):
+<t>Output Channel Count 'C' (8 bits, unsigned):
 <vspace blankLines="1"/>
 This is the number of output channels.
 This might be different than the number of encoded channels, which can change
@@ -617,7 +644,7 @@ The maximum allowable value depends on the channel mapping family, and might be
 See <xref target="channel_mapping"/> for details.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Pre-skip</spanx> (16 bits, unsigned, little
+<t>Pre-skip (16 bits, unsigned, little
  endian):
 <vspace blankLines="1"/>
 This is the number of samples (at 48&nbsp;kHz) to discard from the decoder
@@ -628,9 +655,10 @@ When cropping the beginning of existing Ogg Opus streams, a pre-skip of at
  convergence in the decoder.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Input Sample Rate</spanx> (32 bits, unsigned, little
+<t>Input Sample Rate (32 bits, unsigned, little
  endian):
 <vspace blankLines="1"/>
+This is the sample rate of the original input (before encoding), in Hz.
 This field is <spanx style="emph">not</spanx> the sample rate to use for
  playback of the encoded data.
 <vspace blankLines="1"/>
@@ -639,8 +667,8 @@ Opus can switch between internal audio bandwidths of 4, 6, 8, 12, and
 Each packet in the stream can have a different audio bandwidth.
 Regardless of the audio bandwidth, the reference decoder supports decoding any
  stream at a sample rate of 8, 12, 16, 24, or 48&nbsp;kHz.
-The original sample rate of the encoder input is not preserved by the lossy
- compression.
+The original sample rate of the audio passed to the encoder is not preserved
+ by the lossy compression.
 <vspace blankLines="1"/>
 An Ogg Opus player SHOULD select the playback sample rate according to the
  following procedure:
@@ -649,56 +677,52 @@ An Ogg Opus player SHOULD select the playback sample rate according to the
 <t>Otherwise, if the hardware's highest available sample rate is a supported
  rate, decode at this sample rate.</t>
 <t>Otherwise, if the hardware's highest available sample rate is less than
- 48&nbsp;kHz, decode at the next highest supported rate above this and
- resample.</t>
+ 48&nbsp;kHz, decode at the next higher Opus supported rate above the highest
+ available hardware rate and resample.</t>
 <t>Otherwise, decode at 48&nbsp;kHz and resample.</t>
 </list>
-However, the 'Input Sample Rate' field allows the encoder to pass the sample
+However, the 'Input Sample Rate' field allows the muxer to pass the sample
  rate of the original input stream as metadata.
 This is useful when the user requires the output sample rate to match the
  input sample rate.
-For example, a non-player decoder writing PCM format samples to disk might
- choose to resample the output audio back to the original input sample rate to
- reduce surprise to the user, who might reasonably expect to get back a file
- with the same sample rate as the one they fed to the encoder.
+For example, when not playing the output, an implementation writing PCM format
+ samples to disk might choose to resample the audio back to the original input
+ sample rate to reduce surprise to the user, who might reasonably expect to get
+ back a file with the same sample rate.
 <vspace blankLines="1"/>
 A value of zero indicates 'unspecified'.
-Encoders SHOULD write the actual input sample rate or zero, but decoder
- implementations which do something with this field SHOULD take care to behave
- sanely if given crazy values (e.g., do not actually upsample the output to
- 10 MHz if requested).
-Input sample rates between 8&nbsp;kHz and 192&nbsp;kHz (inclusive) SHOULD be
- supported.
+Muxers SHOULD write the actual input sample rate or zero, but implementations
+ which do something with this field SHOULD take care to behave sanely if given
+ crazy values (e.g., do not actually upsample the output to 10 MHz if
+ requested).
+Implementations SHOULD support input sample rates between 8&nbsp;kHz and
+ 192&nbsp;kHz (inclusive).
 Rates outside this range MAY be ignored by falling back to the default rate of
  48&nbsp;kHz instead.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Output Gain</spanx> (16 bits, signed, little
- endian):
+<t>Output Gain (16 bits, signed, little endian):
 <vspace blankLines="1"/>
-This is a gain to be applied by the decoder.
-It is 20*log10 of the factor to scale the decoder output by to achieve the
- desired playback volume, stored in a 16-bit, signed, two's complement
+This is a gain to be applied when decoding.
+It is 20*log10 of the factor by which to scale the decoder output to achieve
+ the desired playback volume, stored in a 16-bit, signed, two's complement
  fixed-point value with 8 fractional bits (i.e., Q7.8).
+<vspace blankLines="1"/>
+To apply the gain, an implementation could use
 <figure align="center">
-<preamble>
-To apply the gain, a decoder could use
-</preamble>
 <artwork align="center"><![CDATA[
 sample *= pow(10, output_gain/(20.0*256)) ,
 ]]></artwork>
-<postamble>
- where output_gain is the raw 16-bit value from the header.
-</postamble>
 </figure>
+ where output_gain is the raw 16-bit value from the header.
 <vspace blankLines="1"/>
-Virtually all players and media frameworks SHOULD apply it by default.
+Players and media frameworks SHOULD apply it by default.
 If a player chooses to apply any volume adjustment or gain modification, such
  as the R128_TRACK_GAIN (see <xref target="comment_header"/>), the adjustment
  MUST be applied in addition to this output gain in order to achieve playback
  at the normalized volume.
 <vspace blankLines="1"/>
-An encoder SHOULD set this field to zero, and instead apply any gain prior to
+A muxer SHOULD set this field to zero, and instead apply any gain prior to
  encoding, when this is possible and does not conflict with the user's wishes.
 A nonzero output gain indicates the gain was adjusted after encoding, or that
  a user wished to adjust the gain for playback while preserving the ability
@@ -712,19 +736,17 @@ The large range serves in part to ensure that gain can always be losslessly
  saturating.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Channel Mapping Family</spanx> (8 bits,
- unsigned):
+<t>Channel Mapping Family (8 bits, unsigned):
 <vspace blankLines="1"/>
 This octet indicates the order and semantic meaning of the output channels.
 <vspace blankLines="1"/>
-Each possible value of this octet indicates a mapping family, which defines a
- set of allowed channel counts, and the ordered set of channel names for each
- allowed channel count.
+Each currently specified value of this octet indicates a mapping family, which
+ defines a set of allowed channel counts, and the ordered set of channel names
+ for each allowed channel count.
 The details are described in <xref target="channel_mapping"/>.
 </t>
-<t><spanx style="strong">Channel Mapping Table</spanx>:
+<t>Channel Mapping Table:
 This table defines the mapping from encoded streams to output channels.
-It is omitted when the channel mapping family is 0, but REQUIRED otherwise.
 Its contents are specified in <xref target="channel_mapping"/>.
 </t>
 </list>
@@ -732,24 +754,23 @@ Its contents are specified in <xref target="channel_mapping"/>.
 
 <t>
 All fields in the ID headers are REQUIRED, except for the channel mapping
- table, which is omitted when the channel mapping family is 0.
-Implementations SHOULD reject ID headers which do not contain enough data for
- these fields, even if they contain a valid Magic Signature.
+ table, which MUST be omitted when the channel mapping family is 0, but
+ is REQUIRED otherwise.
+Implementations SHOULD reject streams with ID headers that do not contain
+ enough data for these fields, even if they contain a valid Magic Signature.
 Future versions of this specification, even backwards-compatible versions,
  might include additional fields in the ID header.
 If an ID header has a compatible major version, but a larger minor version,
  an implementation MUST NOT reject it for containing additional data not
- specified here.
-However, implementations MAY reject streams in which the ID header does not
- complete on the first page.
+ specified here, provided it still completes on the first page.
 </t>
 
 <section anchor="channel_mapping" title="Channel Mapping">
 <t>
 An Ogg Opus stream allows mapping one number of Opus streams (N) to a possibly
- larger number of decoded channels (M+N) to yet another number of output
- channels (C), which might be larger or smaller than the number of decoded
- channels.
+ larger number of decoded channels (M&nbsp;+&nbsp;N) to yet another number of
+ output channels (C), which might be larger or smaller than the number of
+ decoded channels.
 The order and meaning of these channels are defined by a channel mapping,
  which consists of the 'channel mapping family' octet and, for channel mapping
  families other than family&nbsp;0, a channel mapping table, as illustrated in
@@ -772,7 +793,7 @@ The order and meaning of these channels are defined by a channel mapping,
 <t>
 The fields in the channel mapping table have the following meaning:
 <list style="numbers" counter="8">
-<t><spanx style="strong">Stream Count</spanx> 'N' (8 bits, unsigned):
+<t>Stream Count 'N' (8 bits, unsigned):
 <vspace blankLines="1"/>
 This is the total number of streams encoded in each Ogg packet.
 This value is necessary to correctly parse the packed Opus packets inside an
@@ -783,51 +804,54 @@ This value MUST NOT be zero, as without at least one Opus packet with a valid
 For channel mapping family&nbsp;0, this value defaults to 1, and is not coded.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Coupled Stream Count</spanx> 'M' (8 bits, unsigned):
+<t>Coupled Stream Count 'M' (8 bits, unsigned):
 This is the number of streams whose decoders are to be configured to produce
- two channels.
+ two channels (stereo).
 This MUST be no larger than the total number of streams, N.
 <vspace blankLines="1"/>
 Each packet in an Opus stream has an internal channel count of 1 or 2, which
  can change from packet to packet.
 This is selected by the encoder depending on the bitrate and the audio being
  encoded.
-The original channel count of the encoder input is not preserved by the lossy
- compression.
+The original channel count of the audio passed to the encoder is not
+ necessarily preserved by the lossy compression.
 <vspace blankLines="1"/>
 Regardless of the internal channel count, any Opus stream can be decoded as
  mono (a single channel) or stereo (two channels) by appropriate initialization
  of the decoder.
-The 'coupled stream count' field indicates that the first M Opus decoders are
- to be initialized for stereo output, and the remaining N-M decoders are to be
- initialized for mono only.
-The total number of decoded channels, (M+N), MUST be no larger than 255, as
- there is no way to index more channels than that in the channel mapping.
+The 'coupled stream count' field indicates that the decoders for the first M
+ Opus streams are to be initialized for stereo (two-channel) output, and the
+ remaining (N&nbsp;-&nbsp;M) decoders are to be initialized for mono (a single
+ channel) only.
+The total number of decoded channels, (M&nbsp;+&nbsp;N), MUST be no larger than
+ 255, as there is no way to index more channels than that in the channel
+ mapping.
 <vspace blankLines="1"/>
-For channel mapping family&nbsp;0, this value defaults to C-1 (i.e., 0 for mono
- and 1 for stereo), and is not coded.
+For channel mapping family&nbsp;0, this value defaults to (C&nbsp;-&nbsp;1)
+ (i.e., 0 for mono and 1 for stereo), and is not coded.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Channel Mapping</spanx> (8*C bits):
+<t>Channel Mapping (8*C bits):
 This contains one octet per output channel, indicating which decoded channel
  is to be used for each one.
 Let 'index' be the value of this octet for a particular output channel.
-This value MUST either be smaller than (M+N), or be the special value 255.
+This value MUST either be smaller than (M&nbsp;+&nbsp;N), or be the special
+ value 255.
 If 'index' is less than 2*M, the output MUST be taken from decoding stream
  ('index'/2) as stereo and selecting the left channel if 'index' is even, and
  the right channel if 'index' is odd.
 If 'index' is 2*M or larger, but less than 255, the output MUST be taken from
- decoding stream ('index'-M) as mono.
+ decoding stream ('index'&nbsp;-&nbsp;M) as mono.
 If 'index' is 255, the corresponding output channel MUST contain pure silence.
 <vspace blankLines="1"/>
 The number of output channels, C, is not constrained to match the number of
- decoded channels (M+N).
+ decoded channels (M&nbsp;+&nbsp;N).
 A single index value MAY appear multiple times, i.e., the same decoded channel
  might be mapped to multiple output channels.
 Some decoded channels might not be assigned to any output channel, as well.
 <vspace blankLines="1"/>
-For channel mapping family&nbsp;0, the first index defaults to 0, and if C==2,
- the second index defaults to 1.
+For channel mapping family&nbsp;0, the first index defaults to 0, and if
+ C&nbsp;==&nbsp;2, the second index defaults to 1.
 Neither index is coded.
 </t>
 </list>
@@ -843,17 +867,18 @@ There are three defined mapping families in this specification.
 <t>
 Allowed numbers of channels: 1 or 2.
 RTP mapping.
+This is the same channel interpretation as <xref target="RFC7587"/>.
 </t>
 <t>
 <list style="symbols">
 <t>1 channel: monophonic (mono).</t>
 <t>2 channels: stereo (left, right).</t>
 </list>
-<spanx style="strong">Special mapping</spanx>: This channel mapping value also
+Special mapping: This channel mapping value also
  indicates that the contents consists of a single Opus stream that is stereo if
- and only if C==2, with stream index 0 mapped to output channel 0 (mono, or
- left channel) and stream index 1 mapped to output channel 1 (right channel)
- if stereo.
+ and only if C&nbsp;==&nbsp;2, with stream index&nbsp;0 mapped to output
+ channel&nbsp;0 (mono, or left channel) and stream index&nbsp;1 mapped to
+ output channel&nbsp;1 (right channel) if stereo.
 When the 'channel mapping family' octet has this value, the channel mapping
  table MUST be omitted from the ID header packet.
 </t>
@@ -862,13 +887,13 @@ When the 'channel mapping family' octet has this value, the channel mapping
 <section anchor="channel_mapping_1" title="Channel Mapping Family 1">
 <t>
 Allowed numbers of channels: 1...8.
-Vorbis channel order.
+Vorbis channel order (see below).
 </t>
 <t>
 Each channel is assigned to a speaker location in a conventional surround
  arrangement.
 Specific locations depend on the number of channels, and are given below
- in order of the corresponding channel indicies.
+ in order of the corresponding channel indices.
 <list style="symbols">
   <t>1 channel: monophonic (mono).</t>
   <t>2 channels: stereo (left, right).</t>
@@ -885,11 +910,11 @@ This set of surround options and speaker location orderings is the same
  as those used by the Vorbis codec <xref target="vorbis-mapping"/>.
 The ordering is different from the one used by the
  WAVE <xref target="wave-multichannel"/> and
- FLAC <xref target="flac"/> formats,
+ Free Lossless Audio Codec (FLAC) <xref target="flac"/> formats,
  so correct ordering requires permutation of the output channels when decoding
  to or encoding from those formats.
-'LFE' here refers to a Low Frequency Effects, often mapped to a subwoofer
- with no particular spatial position.
+'LFE' here refers to a Low Frequency Effects channel, often mapped to a
+  subwoofer with no particular spatial position.
 Implementations SHOULD identify 'side' or 'rear' speaker locations with
  'surround' and 'back' as appropriate when interfacing with audio formats
  or systems which prefer that terminology.
@@ -904,10 +929,11 @@ No defined channel meaning.
 </t>
 <t>
 Channels are unidentified.
-General-purpose players SHOULD NOT attempt to play these streams, and offline
- decoders MAY deinterleave the output into separate PCM files, one per channel.
-Decoders SHOULD NOT produce output for channels mapped to stream index 255
- (pure silence) unless they have no other way to indicate the index of
+General-purpose players SHOULD NOT attempt to play these streams.
+Offline implementations MAY deinterleave the output into separate PCM files,
+ one per channel.
+Implementations SHOULD NOT produce output for channels mapped to stream index
+ 255 (pure silence) unless they have no other way to indicate the index of
  non-silent channels.
 </t>
 </section>
@@ -916,8 +942,8 @@ Decoders SHOULD NOT produce output for channels mapped to stream index 255
  title="Undefined Channel Mappings">
 <t>
 The remaining channel mapping families (2...254) are reserved.
-A decoder encountering a reserved channel mapping family value SHOULD act as
- though the value is 255.
+A demuxer implementation encountering a reserved channel mapping family value
+ SHOULD act as though the value is 255.
 </t>
 </section>
 
@@ -931,16 +957,16 @@ Players SHOULD perform channel mixing to increase or reduce the number of
 </t>
 
 <t>
-Implementations MAY use the following matricies to implement downmixing from
+Implementations MAY use the following matrices to implement downmixing from
  multichannel files using <xref target="channel_mapping_1">Channel Mapping
  Family 1</xref>, which are known to give acceptable results for stereo.
-Matricies for 3 and 4 channels are normalized so each coefficent row sums
+Matrices for 3 and 4 channels are normalized so each coefficient row sums
  to 1 to avoid clipping.
 For 5 or more channels they are normalized to 2 as a compromise between
  clipping and dynamic range reduction.
 </t>
 <t>
-In these matricies the front left and front right channels are generally
+In these matrices the front left and front right channels are generally
 passed through directly.
 When a surround channel is split between both the left and right stereo
  channels, coefficients are chosen so their squares sum to 1, which
@@ -958,7 +984,7 @@ R output = (                   0.414214 * center + 0.585786 * right )
 ]]></artwork>
 <postamble>
 Exact coefficient values are 1 and 1/sqrt(2), multiplied by
- 1/(1 + 1/sqrt(2)) for normalization.
+ 1/(1&nbsp;+&nbsp;1/sqrt(2)) for normalization.
 </postamble>
 </figure>
 
@@ -1027,8 +1053,8 @@ Exact coefficient values are 1, 1/sqrt(2), sqrt(3)/2, 1/2 and
  sqrt(3)/2/sqrt(2), multiplied by
  2/(1&nbsp;+&nbsp;1/sqrt(2)&nbsp;+&nbsp;sqrt(3)/2&nbsp;+&nbsp;1/2 +
  sqrt(3)/2/sqrt(2) + 1/sqrt(2)) for normalization.
-The coeffients are in the same order as in <xref target="channel_mapping_1" />,
- and the matricies above.
+The coefficients are in the same order as in <xref target="channel_mapping_1" />,
+ and the matrices above.
 </postamble>
 </figure>
 
@@ -1044,8 +1070,8 @@ The coeffients are in the same order as in <xref target="channel_mapping_1" />,
 <postamble>
 Exact coefficient values are 1, 1/sqrt(2), sqrt(3)/2 and 1/2, multiplied by
  2/(2&nbsp;+&nbsp;2/sqrt(2)&nbsp;+&nbsp;sqrt(3)) for normalization.
-The coeffients are in the same order as in <xref target="channel_mapping_1" />,
- and the matricies above.
+The coefficients are in the same order as in <xref target="channel_mapping_1" />,
+ and the matrices above.
 </postamble>
 </figure>
 
@@ -1093,7 +1119,7 @@ The comment header consists of a 64-bit magic signature, followed by data in
  Vorbis, except (like Ogg Theora and Speex) the final "framing bit" specified
  in the Vorbis spec is not present.
 <list style="numbers">
-<t><spanx style="strong">Magic Signature</spanx>:
+<t>Magic Signature:
 <vspace blankLines="1"/>
 This is an 8-octet (64-bit) field that allows codec identification and is
  human-readable.
@@ -1112,15 +1138,14 @@ Starting with "Op" helps distinguish it from audio data packets, as this is an
  invalid TOC sequence.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Vendor String Length</spanx> (32 bits, unsigned,
- little endian):
+<t>Vendor String Length (32 bits, unsigned, little endian):
 <vspace blankLines="1"/>
 This field gives the length of the following vendor string, in octets.
 It MUST NOT indicate that the vendor string is longer than the rest of the
  packet.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">Vendor String</spanx> (variable length, UTF-8 vector):
+<t>Vendor String (variable length, UTF-8 vector):
 <vspace blankLines="1"/>
 This is a simple human-readable tag for vendor information, encoded as a UTF-8
  string&nbsp;<xref target="RFC3629"/>.
@@ -1128,12 +1153,11 @@ No terminating null octet is necessary.
 <vspace blankLines="1"/>
 This tag is intended to identify the codec encoder and encapsulation
  implementations, for tracing differences in technical behavior.
-User-facing encoding applications can use the 'ENCODER' user comment tag
- to identify themselves.
+User-facing applications can use the 'ENCODER' user comment tag to identify
+ themselves.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">User Comment List Length</spanx> (32 bits, unsigned,
- little endian):
+<t>User Comment List Length (32 bits, unsigned, little endian):
 <vspace blankLines="1"/>
 This field indicates the number of user-supplied comments.
 It MAY indicate there are zero user-supplied comments, in which case there are
@@ -1142,8 +1166,7 @@ It MUST NOT indicate that there are so many comments that the comment string
  lengths would require more data than is available in the rest of the packet.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">User Comment #i String Length</spanx> (32 bits,
- unsigned, little endian):
+<t>User Comment #i String Length (32 bits, unsigned, little endian):
 <vspace blankLines="1"/>
 This field gives the length of the following user comment string, in octets.
 There is one for each user comment indicated by the 'user comment list length'
@@ -1151,8 +1174,7 @@ There is one for each user comment indicated by the 'user comment list length'
 It MUST NOT indicate that the string is longer than the rest of the packet.
 <vspace blankLines="1"/>
 </t>
-<t><spanx style="strong">User Comment #i String</spanx> (variable length, UTF-8
- vector):
+<t>User Comment #i String (variable length, UTF-8 vector):
 <vspace blankLines="1"/>
 This field contains a single user comment string.
 There is one for each user comment indicated by the 'user comment list length'
@@ -1179,14 +1201,16 @@ If the least-significant bit of the first byte of this data is 1, then editors
  SHOULD preserve the contents of this data when updating the tags, but if this
  bit is 0, all such data MAY be treated as padding, and truncated or discarded
  as desired.
+This allows informal experimentation with the format of this binary data until
+ it can be specified later.
 </t>
 
 <t>
 The comment header can be arbitrarily large and might be spread over a large
  number of Ogg pages.
-Decoders SHOULD avoid attempting to allocate excessive amounts of memory when
- presented with a very large comment header.
-To accomplish this, decoders MAY reject a comment header larger than
+Implementations MUST avoid attempting to allocate excessive amounts of memory
+ when presented with a very large comment header.
+To accomplish this, implementations MAY reject a comment header larger than
  125,829,120&nbsp;octets, and MAY ignore individual comments that are not fully
  contained within the first 61,440 octets of the comment header.
 </t>
@@ -1201,38 +1225,36 @@ The user comment strings follow the NAME=value format described by
 Two new comment tags are introduced here:
 </t>
 
+<t>First, an optional gain for track normalization:</t>
 <figure align="center">
-  <preamble>An optional gain for track nomalization</preamble>
 <artwork align="left"><![CDATA[
 R128_TRACK_GAIN=-573
 ]]></artwork>
-<postamble>
-representing the volume shift needed to normalize the track's volume
+</figure>
+<t>
+ representing the volume shift needed to normalize the track's volume
  during isolated playback, in random shuffle, and so on.
 The gain is a Q7.8 fixed point number in dB, as in the ID header's 'output
  gain' field.
-</postamble>
-</figure>
-<t>
 This tag is similar to the REPLAYGAIN_TRACK_GAIN tag in
  Vorbis&nbsp;<xref target="replay-gain"/>, except that the normal volume
  reference is the <xref target="EBU-R128"/> standard.
 </t>
+<t>Second, an optional gain for album normalization:</t>
 <figure align="center">
-  <preamble>An optional gain for album nomalization</preamble>
 <artwork align="left"><![CDATA[
 R128_ALBUM_GAIN=111
 ]]></artwork>
-<postamble>
-representing the volume shift needed to normalize the overall volume when
+</figure>
+<t>
+ representing the volume shift needed to normalize the overall volume when
  played as part of a particular collection of tracks.
 The gain is also a Q7.8 fixed point number in dB, as in the ID header's
  'output gain' field.
-</postamble>
-</figure>
+</t>
 <t>
-An Ogg Opus stream MUST NOT have more than one of each tag, and if present
- their values MUST be an integer from -32768 to 32767, inclusive,
+An Ogg Opus stream MUST NOT have more than one of each of these tags, and if
+ present their values MUST be an integer from -32768 to 32767, inclusive,
  represented in ASCII as a base 10 number with no whitespace.
 A leading '+' or '-' character is valid.
 Leading zeros are also permitted, but the value MUST be represented by
@@ -1248,13 +1270,14 @@ If a player chooses to make use of the R128_TRACK_GAIN tag or the
  <spanx style="emph">in addition</spanx> to the 'output gain' value.
 If a tool modifies the ID header's 'output gain' field, it MUST also update or
  remove the R128_TRACK_GAIN and R128_ALBUM_GAIN comment tags if present.
-An encoder SHOULD assume that by default tools will respect the 'output gain'
- field, and not the comment tag.
+A muxer SHOULD place the gain it wants other tools to use by default into the
+ 'output gain' field, and not the comment tag.
 </t>
 <t>
 To avoid confusion with multiple normalization schemes, an Opus comment header
  SHOULD NOT contain any of the REPLAYGAIN_TRACK_GAIN, REPLAYGAIN_TRACK_PEAK,
- REPLAYGAIN_ALBUM_GAIN, or REPLAYGAIN_ALBUM_PEAK tags.
+ REPLAYGAIN_ALBUM_GAIN, or REPLAYGAIN_ALBUM_PEAK tags, unless they are only
+ to be used in some context where there is guaranteed to be no such confusion.
 <xref target="EBU-R128"/> normalization is preferred to the earlier
  REPLAYGAIN schemes because of its clear definition and adoption by industry.
 Peak normalizations are difficult to calculate reliably for lossy codecs
@@ -1272,17 +1295,20 @@ In the authors' investigations they were not applied consistently or broadly
 Technically, valid Opus packets can be arbitrarily large due to the padding
  format, although the amount of non-padding data they can contain is bounded.
 These packets might be spread over a similarly enormous number of Ogg pages.
-Encoders SHOULD limit the use of padding in audio data packets to no more than
- is necessary to make a variable bitrate (VBR) stream constant bitrate (CBR).
-Decoders SHOULD reject audio data packets larger than 61,440 octets per Opus
- stream.
-Such packets necessarily contain more padding than needed for this purpose.
-Decoders SHOULD avoid attempting to allocate excessive amounts of memory when
+When encoding, implementations SHOULD limit the use of padding in audio data
+ packets to no more than is necessary to make a variable bitrate (VBR) stream
+ constant bitrate (CBR), unless they have no reasonable way to determine what
+ is necessary.
+Demuxers SHOULD reject audio data packets (treat them as if they were malformed
+ Opus packets with an invalid TOC sequence) larger than 61,440 octets per
+ Opus stream, unless they have a specific reason for allowing extra padding.
+Such packets necessarily contain more padding than needed to make a stream CBR.
+Demuxers MUST avoid attempting to allocate excessive amounts of memory when
  presented with a very large packet.
-Decoders MAY reject or partially process audio data packets larger than
+Demuxers MAY reject or partially process audio data packets larger than
  61,440&nbsp;octets in an Ogg Opus stream with channel mapping families&nbsp;0
  or&nbsp;1.
-Decoders MAY reject or partially process audio data packets in any Ogg Opus
+Demuxers MAY reject or partially process audio data packets in any Ogg Opus
  stream if the packet is larger than 61,440&nbsp;octets and also larger than
  7,680&nbsp;octets per Opus stream.
 The presence of an extremely large packet in the stream could indicate a
@@ -1327,25 +1353,28 @@ This gives a size of 61,310&nbsp;octets, which is rounded up to a multiple of
 When encoding Opus streams, Ogg muxers SHOULD take into account the
  algorithmic delay of the Opus encoder.
 </t>
+<t>
+In encoders derived from the reference
+ implementation&nbsp;<xref target="RFC6716"/>, the number of samples can be
+ queried with:
+</t>
 <figure align="center">
-<preamble>
-In encoders derived from the reference implementation, the number of
- samples can be queried with:
-</preamble>
 <artwork align="center"><![CDATA[
  opus_encoder_ctl(encoder_state, OPUS_GET_LOOKAHEAD(&delay_samples));
 ]]></artwork>
 </figure>
 <t>
-To achieve good quality in the very first samples of a stream, the Ogg encoder
- MAY use linear predictive coding (LPC) extrapolation
- <xref target="linear-prediction"/> to generate at least 120 extra samples at
- the beginning to avoid the Opus encoder having to encode a discontinuous
- signal.
-For an input file containing 'length' samples, the Ogg encoder SHOULD set the
- pre-skip header value to delay_samples+extra_samples, encode at least
- length+delay_samples+extra_samples samples, and set the granulepos of the last
- page to length+delay_samples+extra_samples.
+To achieve good quality in the very first samples of a stream, implementations
+ MAY use linear predictive coding (LPC) extrapolation to generate at least 120
+ extra samples at the beginning to avoid the Opus encoder having to encode a
+ discontinuous signal.
+For more information on linear prediction, see
+ <xref target="linear-prediction"/>.
+For an input file containing 'length' samples, the implementation SHOULD set
+ the pre-skip header value to (delay_samples&nbsp;+&nbsp;extra_samples), encode
+ at least (length&nbsp;+&nbsp;delay_samples&nbsp;+&nbsp;extra_samples)
+ samples, and set the granule position of the last page to
+ (length&nbsp;+&nbsp;delay_samples&nbsp;+&nbsp;extra_samples).
 This ensures that the encoded file has the same duration as the original, with
  no time offset. The best way to pad the end of the stream is to also use LPC
  extrapolation, but zero-padding is also acceptable.
@@ -1360,12 +1389,12 @@ When extending the end of the signal, order-N (typically with N ranging from 8
 The last N samples are used as memory to an infinite impulse response (IIR)
  filter.
 </t>
-<figure align="center">
-<preamble>
+<t>
 The filter is then applied on a zero input to extrapolate the end of the signal.
 Let a(k) be the kth LPC coefficient and x(n) be the nth sample of the signal,
  each new sample past the end of the signal is computed as:
-</preamble>
+</t>
+<figure align="center">
 <artwork align="center"><![CDATA[
         N
        ---
@@ -1394,13 +1423,13 @@ This can be done simply by separating the input streams into segments and
  encoding each segment independently.
 The drawback of this approach is that it creates a small discontinuity
  at the boundary due to the lossy nature of Opus.
-An encoder MAY avoid this discontinuity by using the following procedure:
+A muxer MAY avoid this discontinuity by using the following procedure:
 <list style="numbers">
 <t>Encode the last frame of the first segment as an independent frame by
  turning off all forms of inter-frame prediction.
 De-emphasis is allowed.</t>
-<t>Set the granulepos of the last page to a point near the end of the last
- frame.</t>
+<t>Set the granule position of the last page to a point near the end of the
+ last frame.</t>
 <t>Begin the second segment with a copy of the last frame of the first
  segment.</t>
 <t>Set the pre-skip value of the second stream in such a way as to properly
@@ -1409,19 +1438,19 @@ De-emphasis is allowed.</t>
  the encoder.</t>
 </list>
 </t>
-<figure align="center">
-<preamble>
+<t>
 In encoders derived from the reference implementation, inter-frame prediction
  can be turned off by calling:
-</preamble>
+</t>
+<figure align="center">
 <artwork align="center"><![CDATA[
  opus_encoder_ctl(encoder_state, OPUS_SET_PREDICTION_DISABLED(1));
 ]]></artwork>
-<postamble>
+</figure>
+<t>
 For best results, this implementation requires that prediction be explicitly
  enabled again before resuming normal encoding, even after a reset.
-</postamble>
-</figure>
+</t>
 
 </section>
 
@@ -1431,11 +1460,12 @@ For best results, this implementation requires that prediction be explicitly
 <t>
 A brief summary of major implementations of this draft is available
  at <eref target="https://wiki.xiph.org/OggOpusImplementation"/>,
-  along with their status.
+ along with their status.
 </t>
 <t>
 [Note to RFC Editor: please remove this entire section before
- final publication per <xref target="RFC6982"/>.]
+ final publication per <xref target="RFC6982"/>, along with
+ its references.]
 </t>
 </section>
 
@@ -1444,14 +1474,14 @@ A brief summary of major implementations of this draft is available
 Implementations of the Opus codec need to take appropriate security
  considerations into account, as outlined in <xref target="RFC4732"/>.
 This is just as much a problem for the container as it is for the codec itself.
-It is extremely important for the decoder to be robust against malicious
- payloads.
-Malicious payloads MUST NOT cause the decoder to overrun its allocated memory
- or to take an excessive amount of resources to decode.
-Although problems in encoders are typically rarer, the same applies to the
- encoder.
-Malicious audio streams MUST NOT cause the encoder to misbehave because this
- would allow an attacker to attack transcoding gateways.
+Robustness against malicious payloads is extremely important.
+Malicious payloads MUST NOT cause an implementation to overrun its allocated
+ memory or to take an excessive amount of resources to decode.
+Although problems in encoding applications are typically rarer, the same
+ applies to the muxer.
+Malicious audio input streams MUST NOT cause an implementation to overrun its
+ allocated memory or consume excessive resources because this would allow an
+ attacker to attack transcoding gateways.
 </t>
 
 <t>
@@ -1471,18 +1501,19 @@ An "Ogg Opus file" consists of one or more sequentially multiplexed segments,
 The RECOMMENDED mime-type for Ogg Opus files is "audio/ogg".
 </t>
 
-<figure>
-<preamble>
+<t>
 If more specificity is desired, one MAY indicate the presence of Opus streams
- using the codecs parameter defined in <xref target="RFC6381"/>, e.g.,
-</preamble>
+ using the codecs parameter defined in <xref target="RFC6381"/> and
+ <xref target="RFC5334"/>, e.g.,
+</t>
+<figure>
 <artwork align="center"><![CDATA[
     audio/ogg; codecs=opus
 ]]></artwork>
-<postamble>
- for an Ogg Opus file.
-</postamble>
 </figure>
+<t>
+ for an Ogg Opus file.
+</t>
 
 <t>
 The RECOMMENDED filename extension for Ogg Opus files is '.opus'.
@@ -1497,30 +1528,83 @@ Such streams are not strictly "Ogg Opus files" as described above,
  multiplexed segment, e.g. video or multiple audio tracks.
 In such cases the the '.opus' filename extension is NOT RECOMMENDED.
 </t>
+
+<t>
+In either case, this document updates <xref target="RFC5334"/>
+ to add 'opus' as a codecs parameter value with char[8]: 'OpusHead'
+ as Codec Identifier.
+</t>
 </section>
 
-<section title="IANA Considerations">
+<section anchor="iana" title="IANA Considerations">
 <t>
-This document has no actions for IANA.
+This document updates the IANA Media Types registry to add .opus
+ as a file extension for "audio/ogg", and to add itself as a reference
+ alongside <xref target="RFC5334"/> for "audio/ogg", "video/ogg", and
+ "application/ogg" Media Types.
+</t>
+<t>
+This document defines a new registry "Opus Channel Mapping Families" to
+ indicate how the semantic meanings of the channels in a multi-channel Opus
+ stream are described.
+IANA SHALL create a new name space of "Opus Channel Mapping Families".
+All maintenance within and additions to the contents of this name space MUST be
+ according to the "Specification Requried with Expert Review" registration
+ policy as defined in <xref target="RFC5226"/>.
+Each registry entry consists of a Channel Mapping Family Number, which is
+ specified in decimal in the range 0 to 255, inclusive, and a Reference (or
+ list of references)
+Each Reference must point to sufficient documentation to describe what
+ information is coded in the Opus identification header for this channel
+ mapping family, how a demuxer determines the Stream Count ('N') and Coupled
+ Stream Count ('M') from this information, and how it determines the proper
+ interpretation of each of the decoded channels.
+</t>
+<t>
+This document defines three initial assignments for this registry.
+</t>
+<texttable>
+<ttcol>Value</ttcol><ttcol>Reference</ttcol>
+<c>0</c><c>[RFCXXXX] <xref target="channel_mapping_0"/></c>
+<c>1</c><c>[RFCXXXX] <xref target="channel_mapping_1"/></c>
+<c>255</c><c>[RFCXXXX] <xref target="channel_mapping_255"/></c>
+</texttable>
+<t>
+The designated expert will determine if the Reference points to a specification
+ that meets the requirements for permanence and ready availability laid out
+ in&nbsp;<xref target="RFC5226"/> and that it specifies the information
+ described above with sufficient clarity to allow interoperable
+ implementations.
 </t>
 </section>
 
 <section anchor="Acknowledgments" title="Acknowledgments">
 <t>
-Thanks to Mark Harris, Greg Maxwell, Christopher "Monty" Montgomery, and
- Jean-Marc Valin for their valuable contributions to this document.
+Thanks to Ben Campbell, Mark Harris, Greg Maxwell, Christopher "Monty"
+ Montgomery, Jean-Marc Valin, and Mo Zanaty for their valuable contributions to
+ this document.
 Additional thanks to Andrew D'Addesio, Greg Maxwell, and Vincent Penquerc'h for
  their feedback based on early implementations.
 </t>
 </section>
 
-<section title="Copying Conditions">
+<section title="RFC Editor Notes">
 <t>
-The authors agree to grant third parties the irrevocable right to copy, use,
- and distribute the work, with or without modification, in any medium, without
- royalty, provided that, unless separate permission is granted, redistributed
- modified works do not contain misleading author, version, name of work, or
- endorsement information.
+In&nbsp;<xref target="iana"/>, "RFCXXXX" is to be replaced with the RFC number
+ assigned to this draft.
+</t>
+<t>
+In the Copyright Notice at the start of the document, the following paragraph
+ is to be appended after the regular copyright notice text:
+</t>
+<t>
+"The licenses granted by the IETF Trust to this RFC under Section&nbsp;3.c of
+ the Trust Legal Provisions shall also include the right to extract text from
+ Sections&nbsp;1 through&nbsp;14 of this RFC and create derivative works from
+ these extracts, and to copy, publish, display, and distribute such derivative
+ works in any medium and for any purpose, provided that no such derivative work
+ shall be presented, displayed, or published in a manner that states or implies
+ that it is part of this RFC or any other IETF Document."
 </t>
 </section>
 
@@ -1530,6 +1614,8 @@ The authors agree to grant third parties the irrevocable right to copy, use,
  &rfc2119;
  &rfc3533;
  &rfc3629;
+ &rfc4732;
+ &rfc5226;
  &rfc5334;
  &rfc6381;
  &rfc6716;
@@ -1560,8 +1646,8 @@ The authors agree to grant third parties the irrevocable right to copy, use,
 <references title="Informative References">
 
 <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3550.xml"?-->
- &rfc4732;
  &rfc6982;
+ &rfc7587;
 
 <reference anchor="flac"
  target="https://xiph.org/flac/format.html">
